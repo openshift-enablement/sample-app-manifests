@@ -1,15 +1,24 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "sample-app.fullname" . }}
   labels:
-    {{- include "sample-app.labels" . | nindent 4 }}
+    app: koncepts
+  name: koncepts
 spec:
-  type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
   selector:
-    {{- include "sample-app.selectorLabels" . | nindent 4 }}
+    app: koncepts
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: koncepts-headless
+spec:
+  clusterIP: None
+  selector:
+    app: koncepts
+  type: ClusterIP
